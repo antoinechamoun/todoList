@@ -1,26 +1,19 @@
 const Project = {
     name:"",
-    list:[],
-    todayList:[],
-    weeklyList:[],
-    inboxList:[],
+    id:0,
+    todoList:[],
 
     addTodo(todo) {
-        this.list.push(todo)
+        this.todoList.push(todo)
     },
     
     removeTodo(idx){
-        this.list.forEach((_, id)=>{
+        this.todoList.forEach((_, id)=>{
             if(id === idx){
-                this.list.splice(id, 1)
+                this.todoList.splice(id, 1)
             }
         })
     }
 }
-
-const today = Object.create(Project)
-console.log(today);
-
-
 
 export default Project

@@ -1,22 +1,20 @@
-// import Project from "./Project"
+import Project from "./Project"
 // import Todo from "./Todo"
 // import { compareAsc, format } from 'date-fns'
 
-export const projectsList = JSON.parse(localStorage.getItem('projects')) || []
+export let projectsList = JSON.parse(localStorage.getItem('projects')) || []
+if(projectsList.length>0){
+    projectsList = projectsList.map((project)=>{
+        const temp = Object.create(Project)
+        console.log(temp);
+        temp.name=project.name
+        temp.todoList=project.todoList
+        return temp
+    })
+}
+
 console.log(projectsList);
-export let show = localStorage.getItem("show") || false
-// const washDog = Todo("Wash my dog", "clean", format(new Date(2022, 3, 2), 'dd.MM.yyyy'), "high")
-// console.log(washDog);
-// const todayList = Object.create(Project)
-// todayList.name='today'
-
-// todayList.addTodo(washDog)
-// console.log(todayList);
-
-// todayList.removeTodo(washDog)
-// console.log(todayList);
-
-// projectsList.push(todayList)
+export let show = (localStorage.getItem("show")==='true') || false
 const Sidebar = document.createElement("div")
 Sidebar.className = 'sidebar'
 
@@ -62,7 +60,7 @@ projects.className = "project-title"
 projectsDiv.appendChild(projects)
 
 
-projectsList.forEach((item, id)=>{
+projectsList.forEach((item)=>{
     const singleProject = document.createElement('div')
     singleProject.className='single-project'
 
@@ -79,7 +77,7 @@ projectsList.forEach((item, id)=>{
     projectName.innerText=item.name
 
     const projectClose = document.createElement("span")
-    projectClose.id = id
+    projectClose.id = item.id
     projectClose.className ='material-symbols-outlined edit close'
     projectClose.innerText = 'close'
 
@@ -94,9 +92,7 @@ projectsList.forEach((item, id)=>{
 projectsDiv.appendChild(projectList)
 
 const formProject = document.createElement("div")
-console.log(show + '1');
 formProject.className= show ? 'form show':'form'
-console.log(show + '2');
 formProject.innerHTML=`
 <input type='text' class='project-name'/>
 <button type='button' class='add-btn'>Create</button>

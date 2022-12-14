@@ -2,11 +2,13 @@ import Header from "./Header"
 import Footer from "./Footer"
 import Sidebar from "./Sidebar"
 import Project from "./Project"
+import Body from "./Body"
 import Todo from "./Todo"
 import { projectsList } from "./Sidebar"
 import { compareAsc, format } from 'date-fns'
 import { show } from "./Sidebar"
 
+let id = +localStorage.getItem("id") || 0
 // div content
 const content = document.getElementById('content')
 
@@ -18,7 +20,7 @@ container.className='container'
 container.appendChild(Header)
 container.appendChild(Footer)
 container.appendChild(Sidebar)
-
+container.appendChild(Body)
 // append children to content
 content.appendChild(container)
 
@@ -29,19 +31,25 @@ function createProject(){
     if(formProject.value!==''){
         const prj = Object.create(Project)
         prj.name=formProject.value
+        prj.id=id
+        id++
+        localStorage.setItem("id", id)
         projectsList.push(prj)
         formProject.value=''
+        show=false
         localStorage.setItem("show", false)
         localStorage.setItem('projects', JSON.stringify(projectsList))
-        console.log(prj);
         location.reload()
     }
 }
 
 function removeProject(e){
-    const obj = projectsList[e.srcElement.id]
-    console.log(obj);
-    obj.removeTodo(e.srcElement.id);
+    projectsList.forEach((item,id)=>{
+        if(item.id === +e.srcElement.id){
+            projectsList.splice(id,1)
+        }
+    })
+    localStorage.setItem('projects', JSON.stringify(projectsList))
     location.reload()
 }
 
