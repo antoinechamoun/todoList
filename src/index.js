@@ -1,69 +1,148 @@
-import Header from "./Header"
-import Footer from "./Footer"
-import Sidebar from "./Sidebar"
-import Project from "./Project"
-import Body from "./Body"
-import Todo from "./Todo"
-import { projectsList } from "./Sidebar"
-import { compareAsc, format } from 'date-fns'
-import { show } from "./Sidebar"
+const listsContainer = document.querySelector('[data-lists]')
+const newListForm = document.querySelector('[data-new-list-form')
+const newListInput = document.querySelector('[data-new-list-input')
+const deleteListButton = document.querySelector('[data-delete-list-button]')
+const listDisplayContainer = document.querySelector('[data-list-display-container]')
+const listTitleElement = document.querySelector('[data-list-title]')
+const listCountElement = document.querySelector('[data-list-count]')
+const tasksContainer = document.querySelector('[data-tasks]')
+const taskTemplate = document.getElementById('task-template')
+const newTaskForm = document.querySelector('[data-new-task-form]')
+const newTaskInput = document.querySelector('[data-new-task-input]')
+const clearCompleteTaskButton = document.querySelector('[data-clear-complete-tasks-button]')
 
-let id = +localStorage.getItem("id") || 0
-// div content
-const content = document.getElementById('content')
+const LOCAL_STORAGE_LIST_KEY = 'task.lists'
+const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.selectedListId'
+let lists = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)) || []
+let selectedListId = localStorage.getItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY)
 
-// container of all sections
-const container = document.createElement("div")
-container.className='container'
+listsContainer.addEventListener('click', e => {
+    if(e.target.tagName.toLowerCase() === 'li'){
+        selectedListId = e.target.dataset.listId
+        saveAndRender()
+    }
+})
 
-// append children to container
-container.appendChild(Header)
-container.appendChild(Footer)
-container.appendChild(Sidebar)
-container.appendChild(Body)
-// append children to content
-content.appendChild(container)
+tasksContainer.addEventListener('click', e=>{
+    if(e.target.tagName.toLowerCase() === 'input'){
+        const selectedList = lists.find(list => list.id === selectedListId)
+        const selectedTask = selectedList.tasks.find(task => task.id === e.target.id)
+        selectedTask.complete = e.target.checked
+        save()
+        renderTaskCount(selectedList)
+    }
+})
 
-// functionality
-const projectClose = document.querySelector('.close')
+clearCompleteTaskButton.addEventListener('click', e=>{
+    const selectedList = lists.find(list => list.id === selectedListId)
+    selectedList.tasks = selectedList.tasks.filter(task=>!task.complete)
+    saveAndRender()
+})
 
-function createProject(){
-    if(formProject.value!==''){
-        const prj = Object.create(Project)
-        prj.name=formProject.value
-        prj.id=id
-        id++
-        localStorage.setItem("id", id)
-        projectsList.push(prj)
-        formProject.value=''
-        show=false
-        localStorage.setItem("show", false)
-        localStorage.setItem('projects', JSON.stringify(projectsList))
-        location.reload()
+deleteListButton.addEventListener('click', e => {
+    lists = lists.filter(list => list.id !== selectedListId)
+    selectedListId = null
+    saveAndRender()
+})
+
+newListForm.addEventListener('submit', e => {
+    e.preventDefault()
+    const listName = newListInput.value
+    if(!listName) return
+    const list = createList(listName)
+    newListInput.value = null
+    lists.push(list)
+    saveAndRender()
+})
+
+newTaskForm.addEventListener('submit', e => {
+    e.preventDefault()
+    const taskName = newTaskInput.value
+    if(!taskName) return
+    const task = createTask(taskName)
+    newTaskInput.value = null
+    const selectedList = lists.find(list => list.id === selectedListId)
+    selectedList.tasks.push(task)
+    saveAndRender()
+})
+
+function createList(name){
+   return {id: Date.now().toString(), name: name, tasks:[{
+    id:'dfd',
+    name:'/teset',
+    complete:false
+   },{
+    id:'dfdsd',
+    name:'/tesetsda',
+    complete:true
+   }]}
+}
+
+function createTask(name){
+    return {id: Date.now().toString(), name: name, complete:false}
+ }
+
+function saveAndRender(){
+    save()
+    render()
+}
+
+function save(){
+    localStorage.setItem(LOCAL_STORAGE_LIST_KEY, JSON.stringify(lists))
+    localStorage.setItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY, selectedListId)
+}
+
+function render(){
+    clearElement(listsContainer)
+    renderLists()
+    const selectedList = lists.find(list => list.id === selectedListId)
+    if(selectedListId == null){
+        listDisplayContainer.style.display= 'none'
+    }else{
+        listDisplayContainer.style.display= ''
+        listTitleElement.innerText = selectedList.name
+        renderTaskCount(selectedList)
+        clearElement(tasksContainer)
+        renderTasks(selectedList)
     }
 }
 
-function removeProject(e){
-    projectsList.forEach((item,id)=>{
-        if(item.id === +e.srcElement.id){
-            projectsList.splice(id,1)
-        }
+function renderTasks(selectedList){
+    selectedList.tasks.forEach(task=>{
+        const taskElement = document.importNode(taskTemplate.content, true)
+        const checkbox = taskElement.querySelector('input')
+        checkbox.id=task.id
+        checkbox.checked = task.complete
+        const label = taskElement.querySelector('label')
+        label.htmlFor = task.id
+        label.append(task.name)
+        tasksContainer.appendChild(taskElement)
     })
-    localStorage.setItem('projects', JSON.stringify(projectsList))
-    location.reload()
 }
 
-function showHiddenForm(){
-    show=!show
-    localStorage.setItem("show", show)
-    location.reload()
+function renderTaskCount(selectedList){
+    const incompleteTaskCount = selectedList.tasks.filter(task=>!task.complete).length
+    const taskString = incompleteTaskCount === 1 ? 'task' : 'tasks'
+    listCountElement.innerText =`${incompleteTaskCount} ${taskString}  remaining `
 }
 
-const formProject = document.querySelector('.project-name')
-const addBtn=document.querySelector('.add-btn')
+function renderLists(){
+    lists.forEach((list)=>{
+        const listElement = document.createElement('li')
+        listElement.dataset.listId = list.id
+        listElement.classList.add('list-name')
+        listElement.innerText = list.name
+        if(list.id === selectedListId){
+            listElement.classList.add('active-list')
+        }
+        listsContainer.appendChild(listElement)
+    })
+}
 
-addBtn.addEventListener('click', createProject)
-projectClose && projectClose.addEventListener('click', removeProject)
+function clearElement(element){
+    while(element.firstChild){
+        element.removeChild(element.firstChild)
+    }
+}
 
-const showForm = document.querySelector('.new-project')
-showForm && showForm.addEventListener('click', showHiddenForm)
+render()

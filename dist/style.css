@@ -1,162 +1,235 @@
-*{
-    margin: 0;
-    padding: 0;
-}
-
 :root{
-    --primary-blue: rgb(2, 115, 115);
-    --primary-green:#025940;
-    --primary-orange:#BF6C3B;
+    --clr-primary: rgb(54, 112, 199);
+    --clr-light:#f4f4f4;
+    --clr-dark:#333;
+    --clr-warning:rgb(99,36,36);
 }
 
-.logo-img{
-    color: #BF6C3B;
-    scale: 2;
-    margin-right: 20px;
+*, *::before, *::after{
+    font-family: inherit;
+    box-sizing: border-box;
 }
 
-.title-txt{
-    color: #BF6C3B;
+body{
+    margin: 0;
+    font-family: "Work Sans", sans-serif;
+    font-weight: 300;
+    font-size: 1.5rem;
+    background-color: var(--clr-primary);
+    color: var(--clr-light);
+    display: grid;
+    grid: 
+    "header header header header" auto
+    "...... lists  active ......" auto/
+    1fr minmax(100px, 300px) minmax(250px, 500px) 1fr;
 }
 
-.header{
-    background-color: #027373;
-    padding: 20px;
+.title{
+    grid-area: header;
+    text-align: center;
+    font-size: calc(7vw + 2rem);
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.1);
+    margin: -0.3em 0 0.5em;
+}
+
+.all-tasks{
+    grid-area: lists;
+}
+
+.task-list{
+    font-size: 1.2rem;
+    line-height: 1.7;
+    list-style: circle;
+    padding-left: 1.1em;
+}
+
+form{
     display: flex;
-    align-items: center;
-    justify-content: left;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
-.footer{
-    width: 100vw;
-    padding: 20px;
-    position: fixed;
-    bottom: 0;
-    display: flex;
-    background-color: #027373;
-    justify-content: center;
-    z-index: 2;
-}
-
-.footer-txt{
-    color: #BF6C3B;
-    font-size: large;
-    font-weight: bolder;
-}
-
-.sidebar{
-    position: fixed;
-    left: 0;
-    height: 100%;
-    width: 230px;
-    padding: 30px;
-    background-color: rgba(2, 115, 115,0.4);
-    color: #BF6C3B;
-    font-size: larger;
-    font-weight: 400;
-}
-
-.notifications{
-    list-style: none;
-    font-size: larger;
+.btn{
     cursor: pointer;
-    margin-bottom: 40px;
+    background: 0;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font-size: 1rem;
 }
 
-.menu:hover{
-    background-color: #027373;
+.btn.create{
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-right: 0.25em;
+    transition: opacity 250ms ease-in;
 }
 
-.menu{
+.btn.create:hover{
+    opacity: 0.7;
+}
+
+.new{
+    background: transparent;
+    border: 0;
+    color: inherit;
+    border-bottom: 1px solid currentColor;
+    font-size: inherit;
+    outline: none;
+    transition: border-bottom 250ms ease-in;
+    order: 2;
+}
+
+.new:focus {
+    border-bottom-width: 3px;
+}
+
+.new::placeholder{
+    color: gray;
+    opacity: 0.6;
+}
+
+.new:focus::placeholder {  
+    opacity: 0.3;
+}
+
+.new.list{
+    font-size: 1.1rem;
+}
+
+.todo-list{
+    --spacer:2rem;
+    grid-area: active;
+    background: var(--clr-light);
+    color: var(--clr-dark);
+}
+
+.todo-header{
+    background: #e4e4e4;
+    padding: var(--spacer);
     display: flex;
-    justify-content: left;
     align-items: center;
-    padding:10px;
-    border-radius: 10px;
-}
-
-.option-text{
-    margin: 10px;
-}
-
-.project-title{
-    margin-bottom: 10px;
-}
-
-.edit{
-    font-size: larger;
-    font-weight: 400;
-}
-
-.single-project{
-    display: flex;
     justify-content: space-between;
+}
+
+.list-name{
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.list-name:hover{
+    opacity: 0.7;
+}
+
+.active-list{
+    font-weight: 900;
+}
+
+.list-title{
+    margin: 0;
+}
+
+.task-count{
+    margin: 0;
+    font-size: 1rem;
+}
+
+.todo-body{
+    padding: var(--spacer);
+    position: relative;
+}
+
+.new-task-creator .create{
+    color: var(--clr-primary);
+}
+
+[type='checkbox']{
+    opacity: 0;
+    position: absolute;
+}
+
+.task label {
+    display: inline-flex;
     align-items: center;
-    border-radius: 10px;
+    position: relative;
 }
 
-.single-project:hover{
-    background-color: #027373;
+.task{
+    position: relative;
+    margin-bottom: 1.5em;
 }
 
-.single-project p{
-    margin-left: 10px;
+.task::after{
+    content: "";
+    position: absolute;
+    right: 0;
+    left: 0;
+    height: 2px;
+    background: currentColor;
+    bottom: -0.5em;
+    opacity: 0.1;
 }
 
-.left-side{
-    display: flex;
-    padding: 20px 10px;
-    font-size: larger;
+.custom-checkbox{
+    --size:0.75em;
+    display: inline-block;
+    margin-right: var(--size);
+    width: var(--size);
+    height: var(--size);
     cursor: pointer;
-}
-.right-side{
-    padding: 20px 10px;
-    font-size: larger;
-    cursor: pointer;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    transform: scale(1);
+    transition: transform 200ms ease-in-out;
 }
 
-.new-project{
+.task:hover .custom-checkbox,
+[type='checkbox']:focus + label .custom-checkbox{
+    transform: scale(1.2);
+    color: var(--clr-primary);
+}
+
+[type='checkbox']:checked + label .custom-checkbox{
+    background: var(--clr-primary);
+    border-color: var(--clr-primary);
+    box-shadow: inset 0 0 0 2px white;
+}
+
+[type='checkbox']:checked + label {
+    opacity: 0.5;
+}
+
+.task label::after {
+    content:"";
+    position: absolute;
+    left: 1.5em;
+    right: 0;
+    height: 3px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: all 150ms ease-in-out;
+}
+
+[type='checkbox']:checked + label::after{
+    transform: scaleX(1);
+}
+
+.delete-stuff{
     display: flex;
-    border-radius: 10px;
-    font-size: larger;
-    cursor: pointer;
-    padding: 20px 10px;
-    margin-top: 20px;
+    justify-content: space-evenly;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: -35px;
+    color: var(--clr-light);
 }
 
-.new-project:hover{
-    background-color: #027373;
+.btn.delete{
+    opacity: 0.7;
+    font-size: 1rem;
+    transition: color 200ms;
 }
 
-.form{
-    display: none;
+.btn.delete:hover{
+    color: var(--clr-warning);
 }
-
-.show{
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    gap: 5px;
-}
-
-.project-name{
-    height:40px;
-    border-radius: 10px;
-    border: transparent;
-    background-color: #BF6C3B;
-    color: #027373;
-    font-size: large;
-    font-weight: 700;
-}
-
-.add-btn{
-    height: 40px;
-    border-radius: 10px;
-    border: transparent;
-    background-color: #027373;
-    color: #BF6C3B;
-    font-size: large;
-    font-weight: 700;
-}
-
