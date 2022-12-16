@@ -1,0 +1,161 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+:root{
+    --primary-blue: rgb(2, 115, 115);
+    --primary-green:#025940;
+    --primary-orange:#BF6C3B;
+}
+
+.logo-img{
+    color: #BF6C3B;
+    scale: 2;
+    margin-right: 20px;
+}
+
+.title-txt{
+    color: #BF6C3B;
+}
+
+.header{
+    background-color: #027373;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.footer{
+    width: 100vw;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    background-color: #027373;
+    justify-content: center;
+    z-index: 2;
+}
+
+.footer-txt{
+    color: #BF6C3B;
+    font-size: large;
+    font-weight: bolder;
+}
+
+.sidebar{
+    position: fixed;
+    left: 0;
+    height: 100%;
+    width: 230px;
+    padding: 30px;
+    background-color: rgba(2, 115, 115,0.4);
+    color: #BF6C3B;
+    font-size: larger;
+    font-weight: 400;
+}
+
+.notifications{
+    list-style: none;
+    font-size: larger;
+    cursor: pointer;
+    margin-bottom: 40px;
+}
+
+.menu:hover{
+    background-color: #027373;
+}
+
+.menu{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding:10px;
+    border-radius: 10px;
+}
+
+.option-text{
+    margin: 10px;
+}
+
+.project-title{
+    margin-bottom: 10px;
+}
+
+.edit{
+    font-size: larger;
+    font-weight: 400;
+}
+
+.single-project{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.single-project:hover{
+    background-color: #027373;
+}
+
+.single-project p{
+    margin-left: 10px;
+}
+
+.left-side{
+    display: flex;
+    padding: 20px 10px;
+    font-size: larger;
+    cursor: pointer;
+}
+.right-side{
+    padding: 20px 10px;
+    font-size: larger;
+    cursor: pointer;
+}
+
+.new-project{
+    display: flex;
+    border-radius: 10px;
+    font-size: larger;
+    cursor: pointer;
+    padding: 20px 10px;
+    margin-top: 20px;
+}
+
+.new-project:hover{
+    background-color: #027373;
+}
+
+.form{
+    display: none;
+}
+
+.show{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    gap: 5px;
+}
+
+.project-name{
+    height:40px;
+    border-radius: 10px;
+    border: transparent;
+    background-color: #BF6C3B;
+    color: #027373;
+    font-size: large;
+    font-weight: 700;
+}
+
+.add-btn{
+    height: 40px;
+    border-radius: 10px;
+    border: transparent;
+    background-color: #027373;
+    color: #BF6C3B;
+    font-size: large;
+    font-weight: 700;
+}
