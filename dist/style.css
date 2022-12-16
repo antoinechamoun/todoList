@@ -109,6 +109,7 @@
     padding: 20px 10px;
     font-size: larger;
     cursor: pointer;
+    flex: 1;
 }
 .right-side{
     padding: 20px 10px;
@@ -151,6 +152,7 @@
 }
 
 .add-btn{
+    cursor: pointer;
     height: 40px;
     border-radius: 10px;
     border: transparent;
@@ -158,4 +160,10 @@
     color: #BF6C3B;
     font-size: large;
     font-weight: 700;
+}
+
+.body{
+    position: absolute;
+    left: 400px;
+    padding: 50px;
 }

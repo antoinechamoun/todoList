@@ -12,7 +12,62 @@
     <title>Document</title>
   </head>
   <body>
-    <div id="content"></div>
+    <div id="content">
+      <div class="header">
+        <span class="material-symbols-outlined logo-img">fact_check</span>
+        <h1 class="title-txt">TODO List</h1>
+      </div>
+      <div class="footer">
+        <p class="footer-txt">Copyright © 2022 antoinechamoun</p>
+      </div>
+      <div class="sidebar">
+        <ul class="notifications">
+          <li class="menu" inbox-list>
+            <span class="material-symbols-outlined edit">upcoming</span>
+            <p class="option-text">Inbox</p>
+          </li>
+          <li class="menu" today-list>
+            <span class="material-symbols-outlined edit">inbox</span>
+            <p class="option-text">Today</p>
+          </li>
+          <li class="menu" weekly-list>
+            <span class="material-symbols-outlined edit">calendar_view_week</span>
+            <p class="option-text">This week</p>
+          </li>
+        </ul>
+        <div class="projects-list">
+          <h1 class="project-title">Projects</h1>
+          <div class="project-item-list" projects-list>
+          </div>
+        </div>
+        <div class="form" create-project-form>
+          <input type="text" class="project-name" add-project-input>
+          <button type="submit" class="add-btn" add-project-btn>Create</button>
+          <button type="reset" class="add-btn" clear-project-btn>Clear</button>
+        </div>
+        <div class="new-project" create-new-project-btn>
+          <span class="material-symbols-outlined edit">add</span>
+          <p>Add Project</p>
+        </div>
+      </div>
+      <div class="body" class="tasks-container" tasks-list-container>
+        <h2 class="task-list-title"></h2>
+        <ul class="task-list" data-lists>
+          <template id="task-template">
+            <div class="task" data-tasks>
+                <input type="checkbox"/>
+                <label >
+                    <span class="custom-checkbox"></span>    
+                </label>
+            </div>
+        </template>
+        </ul>
+        <form data-new-list-form>
+            <input type="text" class="new list" data-new-list-input placeholder="new list name" aria-label="new list name"/>
+            <button class="btn create" aria-label="create new list">+</button>
+        </form>
+      </div>
+    </div>
     <script src="main.js"></script>
   </body>
 </html>
