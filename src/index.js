@@ -20,7 +20,7 @@ container.className='container'
 container.appendChild(Header)
 container.appendChild(Footer)
 container.appendChild(Sidebar)
-container.appendChild(Body)
+// container.appendChild(Body)
 // append children to content
 content.appendChild(container)
 
