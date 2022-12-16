@@ -1,3 +1,5 @@
+import { compareAsc, endOfWeek, format, startOfWeek } from 'date-fns'
+
 // Selection of DOM elements
 const inboxLink = document.querySelector('[inbox-list]')
 const todayLink = document.querySelector('[today-list]')
@@ -14,8 +16,7 @@ const projectTitleList = document.querySelector('.task-list-title')
 const projectTasksList = document.querySelector('[data-lists]')
 const bodyProjectLists = document.querySelector('[tasks-list-container]')
 const taskTemplate = document.getElementById('task-template')
-const checkboxInput = document.querySelector('.task')
-
+const removeTasksBtn = document.querySelector('[remove-completed]')
  
 // Creation of variables needed
 export let projectsLists = JSON.parse(localStorage.getItem('projects')) || []
@@ -40,22 +41,79 @@ dataNewListForm.addEventListener('submit', submitNewTask)
 // toggle checked
 bodyProjectLists.addEventListener('click', toggleChecked)
 
+//Remove completed tasks
+removeTasksBtn.addEventListener('click', removeCompleted) 
+
 
 inboxLink.addEventListener('click', e=>{
     console.log(e);
 })
 
 todayLink.addEventListener('click', e=>{
-    console.log(e);
+    projectTasksList.innerText=''
+    if(projectsLists){
+        projectsLists.map((project)=>{
+            if(project.tasks){
+                project.tasks.map((task)=>{
+                    if(task.date === format(new Date(),'yyyy-dd-MM')){
+                        const taskElement = document.importNode(taskTemplate.content, true)
+                        const checkbox = taskElement.querySelector('input')
+                        checkbox.id=task.id
+                        checkbox.checked = task.completed
+                        const label = taskElement.querySelector('label')
+                        label.htmlFor = task.id
+                        label.append(task.title)
+                        projectTasksList.appendChild(taskElement)
+                    }
+                })
+            }
+        })
+    }
 })
 
 weeklyLink.addEventListener('click', e=>{
-    console.log(e);
+    let startOfTheWeek = startOfWeek(new Date(), {weekStartsOn:1}).toLocaleDateString().split('/').reverse()
+    let endOfTheWeek = endOfWeek(new Date(), {weekStartsOn:1}).toLocaleDateString().split('/').reverse()
+    console.log(endOfTheWeek);
+    projectTasksList.innerText=''
+    if(projectsLists){
+        projectsLists.map((project)=>{
+            if(project.tasks){
+                project.tasks.map((task)=>{
+                    let temp = task.date.split('-')
+                    console.log(temp);
+                    if(temp[0] === endOfTheWeek[0] && temp[2] === endOfTheWeek[2] && +temp[1]<= +endOfTheWeek[1] && +temp[1] >= +startOfTheWeek[1]){
+                        const taskElement = document.importNode(taskTemplate.content, true)
+                        const checkbox = taskElement.querySelector('input')
+                        checkbox.id=task.id
+                        checkbox.checked = task.completed
+                        const label = taskElement.querySelector('label')
+                        label.htmlFor = task.id
+                        label.append(task.title)
+                        projectTasksList.appendChild(taskElement)
+                    }
+                })
+            }
+        })
+    }
 })
+
+function removeCompleted(){
+    if(selectedList.task){
+        selectedList.tasks = selectedList.tasks.filter((task)=> task.completed !== true)
+        renderTasks()
+        save()
+    }
+}
 
 function toggleChecked(e){
     if(e.target.id || e.target.htmlFor){
-        console.log(e);
+        selectedList.tasks.forEach((task)=>{
+            if(task.id === e.target.id){
+                task.completed = !task.completed
+                save()
+            }
+        })
     }
 }
 
@@ -81,10 +139,10 @@ function handleProjects(e) {
 function submitNewTask(e){
     e.preventDefault()
     if(selectedList.tasks !== undefined){
-        selectedList.tasks.push({title:dataNewListInput.value, completed:false, id:new Date().getTime().toString()})
+        selectedList.tasks.push({title:dataNewListInput.value, date:format(new Date(), 'yyyy-dd-MM'), completed:false, id:new Date().getTime().toString()})
     }else{
         selectedList.tasks = []
-        selectedList.tasks[0]={title:dataNewListInput.value, completed:false, id:new Date().getTime().toString()}
+        selectedList.tasks[0]={title:dataNewListInput.value, date:format(new Date(), 'yyyy-dd-MM'), completed:false, id:new Date().getTime().toString()}
     }
     renderTasks()
     renderAndSave()
@@ -94,6 +152,7 @@ function handleSelectedList(){
     renderProjects()
     let selectedProjectDiv = document.getElementById(`${selectedList.id}`)
     if(selectedProjectDiv){
+        bodyProjectLists.classList ='body active'
         selectedProjectDiv.style.backgroundColor = 'rgb(2, 115, 115)' 
         projectTitleList.innerText = selectedList.title
         renderTasks()

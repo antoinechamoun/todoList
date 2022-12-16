@@ -78,6 +78,7 @@
 
 .option-text{
     margin: 10px;
+    flex:1;
 }
 
 .project-title{
@@ -163,6 +164,11 @@
 }
 
 .body{
+    display: none;
+}
+
+.active{
+    display: block;
     position: absolute;
     left: 400px;
     padding: 50px;
