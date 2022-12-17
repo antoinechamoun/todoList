@@ -1,4 +1,4 @@
-import { compareAsc, endOfWeek, format, startOfWeek } from 'date-fns'
+import { compareAsc, endOfWeek, format, isThisWeek, startOfWeek } from 'date-fns'
 
 // Selection of DOM elements
 const inboxLink = document.querySelector('[inbox-list]')
@@ -71,17 +71,15 @@ todayLink.addEventListener('click', e=>{
     }
 })
 
-weeklyLink.addEventListener('click', e=>{
+weeklyLink.addEventListener('click', ()=>{
     let startOfTheWeek = startOfWeek(new Date(), {weekStartsOn:1}).toLocaleDateString().split('/').reverse()
     let endOfTheWeek = endOfWeek(new Date(), {weekStartsOn:1}).toLocaleDateString().split('/').reverse()
-    console.log(endOfTheWeek);
     projectTasksList.innerText=''
     if(projectsLists){
         projectsLists.map((project)=>{
             if(project.tasks){
                 project.tasks.map((task)=>{
                     let temp = task.date.split('-')
-                    console.log(temp);
                     if(temp[0] === endOfTheWeek[0] && temp[2] === endOfTheWeek[2] && +temp[1]<= +endOfTheWeek[1] && +temp[1] >= +startOfTheWeek[1]){
                         const taskElement = document.importNode(taskTemplate.content, true)
                         const checkbox = taskElement.querySelector('input')
@@ -99,7 +97,7 @@ weeklyLink.addEventListener('click', e=>{
 })
 
 function removeCompleted(){
-    if(selectedList.task){
+    if(selectedList.tasks){
         selectedList.tasks = selectedList.tasks.filter((task)=> task.completed !== true)
         renderTasks()
         save()
